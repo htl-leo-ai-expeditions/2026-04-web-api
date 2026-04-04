@@ -64,6 +64,21 @@ These rules define how FitBook works. Your API design must enforce all of them.
 
 ---
 
+## Design Decisions to Think About
+
+As you work through the phases below, you will face design decisions that don't have a single correct answer. Part of the exercise is recognizing these decisions, weighing trade-offs, and documenting your choice. Here are some questions to consider — you don't need to answer them upfront, but keep them in mind as you design.
+
+- **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
+- **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT". Should these be a separate entity with their own endpoints, a fixed enum, or a free-text list stored on the instructor? What does your choice imply for validation of Rule 4?
+- **Cancellation vs. deletion:** When a member cancels a booking, do you DELETE the booking resource or do you PATCH its status to "cancelled"? What information is lost in each case?
+- **Updating a class:** If an instructor is reassigned to a class that already has bookings, do the bookings stay? What if the capacity is reduced below the current number of bookings?
+- **Time zone handling:** The studio operates in a specific time zone. Should the API accept and return UTC times, local times, or both? How does this affect Rule 9 (no booking past classes)?
+- **What the server generates vs. what the client sends:** Which fields should the server set automatically (e.g. `id`, `createdAt`)? Which fields should the client never be able to override?
+
+> **Note:** There are valid arguments for different choices. What matters is that you **make a deliberate decision and document it** in your LLD. An LLD that says "bookings are nested under classes *because...*" is better than one that nests them without explanation.
+
+---
+
 ## Your Task: Write the LLD
 
 Your LLD must cover all sections listed below. Work **top-down** — start with the big picture and progressively add detail. Resist the urge to jump straight into endpoint details.

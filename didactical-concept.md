@@ -47,6 +47,17 @@ This is where the bulk of the work happens. Key learning moments:
 - **Error scenarios**: Students typically forget the unhappy path. The business rules force them to think about what can go wrong.
 - **JSON examples**: Writing concrete examples often reveals inconsistencies in the abstract specification.
 
+### Design Decisions Section (between Business Rules and Task)
+
+This section poses open-ended design questions that students will encounter during their work. It serves several pedagogical purposes:
+
+- **Scaffolds without spoiling.** Students who freeze at "now design the API" get concrete angles to think about, but no answers are given — they must reason through trade-offs themselves.
+- **Teaches that design involves choices.** Many students assume there is one correct REST design. The questions make it explicit that reasonable people disagree and that the key skill is *deciding and documenting*, not guessing the "right" answer.
+- **Surfaces non-obvious complexity.** Questions like "what happens when capacity is reduced below current bookings?" force students to discover edge cases they would otherwise miss until implementation. This is exactly the kind of thinking an LLD should capture.
+- **Models professional practice.** In real API design, teams discuss these trade-offs before building. The section mirrors a design review or RFC process.
+
+**Teacher note:** If students treat these questions as a checklist to answer in a separate section, redirect them. The questions should inform decisions visible *throughout* the LLD (in conventions, endpoint specs, and data model), not be answered in isolation. A student who picked "bookings nested under classes" should show this consistently in their URI design, endpoint table, and examples.
+
 ### Worked Example (between Phase 4 and Requirements)
 
 The worked example (`POST /api/v1/members`) serves as an **anchor point** — it answers the question "How detailed should I be?" more effectively than any instruction can. Pedagogical rationale:
