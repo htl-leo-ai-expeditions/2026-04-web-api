@@ -40,3 +40,13 @@
 **Changes:**
 - `exercise.md`: Removed the "What You Will Practice" subsection (redundant with intro). Inlined estimated effort as a bold line. Tightened the Design Decisions intro paragraph. Shortened the worked example closing note. Removed the "Be consistent" tip (covered by self-check item 4). Sharpened self-check items 3 and 4 for clarity.
 - `goal.md`: Replaced the "Domain Choice (to be decided)" section with a definitive one-paragraph summary of the chosen domain and why.
+
+## 2026-04-04 — Tone pass: make exercise language more appealing to students
+
+**What:** Rewrote framing text, transitions, and instructions throughout `exercise.md` to use a more direct, conversational tone. Added a "Tone and Language" section to `didactical-concept.md`.
+
+**Why:** The exercise content is solid but the language read like a formal specification — fine for a teacher guide, less engaging for 18-20 year olds encountering API design for the first time. Students are more likely to read carefully and stay motivated when the text talks *to* them rather than *at* them. The changes make the exercise feel approachable without sacrificing any precision in the business rules, worked example, or requirements.
+
+**Changes:**
+- `exercise.md`: Rewrote the introduction to be more engaging ("Here's the twist: you won't write a single line of code"). Made the scenario more vivid ("Picture a small fitness studio around the corner"). Added momentum to phase descriptions ("This is the main event"). Made tips punchier ("15 well-designed endpoints beat 30 messy ones. Every time."). Softened imperative language throughout while keeping instructions clear.
+- `didactical-concept.md`: New "Tone and Language" section explaining why conversational tone is a deliberate pedagogical choice, not casualness.

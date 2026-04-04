@@ -89,6 +89,17 @@ The split serves two purposes:
 
 The checklist format in the exercise makes it clear which items are required and which are stretch goals. Teachers should emphasize that a complete, clean core submission scores better than a half-finished one that attempts all advanced topics.
 
+## Tone and Language
+
+The exercise uses a direct, conversational tone rather than formal academic language. This is deliberate:
+
+- **Reduces distance.** Students aged 18-20 engage more readily with text that talks *to* them rather than *at* them. Phrases like "Here's the twist" or "This is the main event" create momentum.
+- **Models professional communication.** Real-world technical documents (design docs, RFCs, API guides) increasingly use clear, informal language. Formal stiffness is not a sign of quality.
+- **Lowers perceived difficulty.** The exercise content is genuinely challenging. Approachable language prevents students from feeling intimidated before they even start reading the business rules.
+- **Maintains precision where it counts.** The conversational tone applies to framing, transitions, and instructions — not to the business rules, the worked example, or the requirements checklist. Those stay precise and unambiguous.
+
+**Teacher note:** If students perceive the tone as "too casual," the content will correct that impression quickly once they hit the design decisions and business rules.
+
 ## Connection to Broader Learning Objective
 
 The exercise frames the LLD as a "prompt for an AI." This serves multiple purposes:

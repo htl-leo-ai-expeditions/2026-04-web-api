@@ -2,21 +2,21 @@
 
 ## Introduction
 
-In this exercise, you will design a RESTful web API for **FitBook**, a fictional fitness studio management system. Your task is **not** to write code — it is to produce a **Low-Level Design (LLD) document** that specifies the API completely and unambiguously.
+You are about to design a RESTful web API for **FitBook**, a fictional fitness studio management system. Here's the twist: **you won't write a single line of code.** Instead, you will produce a **Low-Level Design (LLD) document** — a complete blueprint that specifies every detail of the API.
 
-Your LLD should be so precise that a competent developer — or a frontier AI model — could implement a fully working API from your document alone, without needing to ask a single clarifying question. Think of your LLD as a prompt: the clearer and more complete it is, the better the result.
+Why does this matter? Imagine handing your LLD to a developer — or pasting it into a frontier AI model like ChatGPT or Claude. If your spec is precise enough, they should be able to build a fully working API without asking you a single question. Your LLD *is* the prompt. Vague specs produce broken implementations. Precise specs produce working software.
 
-**Estimated effort:** 4-8 hours of focused work. You do not need to finish in one sitting.
+**Estimated effort:** 4-8 hours of focused work. You don't need to finish in one sitting.
 
 ---
 
 ## The Scenario: FitBook Studio
 
-FitBook is a small fitness studio that offers group classes (e.g. Yoga, Spinning, HIIT) led by instructors. Members sign up for the studio and book spots in upcoming classes. The studio needs an API to manage its operations.
+Picture a small fitness studio around the corner. They run group classes — Yoga on Monday mornings, Spinning at lunch, HIIT after work — each led by an instructor. People sign up as members and book spots in upcoming classes. The studio owner wants an API to manage all of this.
 
 ### The Domain at a Glance
 
-The studio has **members**, **instructors**, and **classes**. Here is how they relate:
+Three things matter in this domain: **members**, **instructors**, and **classes**. Here is how they connect:
 
 ```
 ┌──────────┐       leads        ┌──────────┐
@@ -37,7 +37,7 @@ The studio has **members**, **instructors**, and **classes**. Here is how they r
 
 ### Core Business Rules
 
-These rules define how FitBook works. Your API design must enforce all of them.
+These are the rules of the FitBook world. Your API must enforce every single one — if a rule says "only active members can book," then your API needs to check that and reject the request if it's violated.
 
 1. **Members** have a first name, last name, email (unique), and a membership status (active or inactive). Only active members can book classes.
 2. **Instructors** have a first name, last name, email (unique), and a list of qualifications (e.g. "Yoga", "HIIT", "Spinning").
@@ -56,7 +56,7 @@ These rules define how FitBook works. Your API design must enforce all of them.
 
 ## Design Decisions to Think About
 
-As you design, you will face decisions that don't have a single correct answer. Keep these questions in mind — you don't need to answer them upfront, but your LLD should reflect deliberate choices on each.
+Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer — just trade-offs. Don't try to answer these upfront. Instead, keep them in the back of your mind and let your LLD reflect a deliberate choice on each.
 
 - **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
 - **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT". Should these be a separate entity with their own endpoints, a fixed enum, or a free-text list stored on the instructor? What does your choice imply for validation of Rule 4?
@@ -65,27 +65,27 @@ As you design, you will face decisions that don't have a single correct answer. 
 - **Time zone handling:** The studio operates in a specific time zone. Should the API accept and return UTC times, local times, or both? How does this affect Rule 9 (no booking past classes)?
 - **What the server generates vs. what the client sends:** Which fields should the server set automatically (e.g. `id`, `createdAt`)? Which fields should the client never be able to override?
 
-> **There are no wrong answers here — only undocumented ones.** An LLD that says "bookings are nested under classes *because...*" is stronger than one that nests them without explanation.
+> **There are no wrong answers here — only undocumented ones.** "Bookings are nested under classes *because...*" beats silently nesting them without explanation every time.
 
 ---
 
 ## Your Task: Write the LLD
 
-Your LLD must cover all sections listed below. Work **top-down** — start with the big picture and progressively add detail. Resist the urge to jump straight into endpoint details.
+Your LLD must cover all the sections below. The key principle: work **top-down**. Start with the big picture, then zoom in step by step. It's tempting to jump straight into endpoint details — resist that urge. You'll save yourself a lot of rework.
 
 ### Recommended Workflow
 
-Follow these phases in order. Each phase builds on the previous one.
+Follow these four phases in order. Each one builds on the previous.
 
 #### Phase 1: Big Picture
 
-Identify the main resources (entities) of the API. Sketch their attributes and relationships. Think about which attributes are required vs. optional, which must be unique, and what data types they have.
+Start by figuring out the "what." What are the main resources (entities) in this API? What attributes do they have? How do they relate to each other? Which attributes are required, which are unique, what types do they use?
 
-**Deliverable:** A data model section with entities, attributes, types, and relationships (an ER diagram is encouraged but not required).
+**Deliverable:** A data model section with entities, attributes, types, and relationships. An ER diagram is a nice bonus but not required.
 
 #### Phase 2: General Conventions
 
-Before designing individual endpoints, establish rules that apply across the entire API:
+Before you touch a single endpoint, nail down the rules that apply everywhere. This saves you from the classic mistake of designing ten endpoints and then realizing they all use different naming styles:
 
 - **Base URL structure** — e.g. `/api/v1/...`
 - **Naming conventions** — how are resources named in URIs? Plural or singular? camelCase or kebab-case?
@@ -98,7 +98,7 @@ Before designing individual endpoints, establish rules that apply across the ent
 
 #### Phase 3: Endpoint Overview
 
-List every endpoint your API exposes: HTTP method, URI, and a one-line description. No request/response bodies yet — just the map.
+Now sketch out the full map of your API. List every endpoint: HTTP method, URI, and a one-line description. Don't worry about request/response bodies yet — this is just the bird's-eye view.
 
 Example format:
 
@@ -112,7 +112,7 @@ Example format:
 
 #### Phase 4: Endpoint Details
 
-Now specify each endpoint fully:
+This is the main event — now you go deep on every endpoint:
 
 - **HTTP method and URI** (from Phase 3)
 - **Request body** (if applicable) — with field names, types, required/optional, and validation rules
@@ -127,7 +127,7 @@ Now specify each endpoint fully:
 
 ## Worked Example
 
-To show you the level of detail expected, here is a complete specification for **one** endpoint. Use this as a template for your own work.
+Wondering how detailed your specs should be? Here's a fully worked-out endpoint to set the bar. Use it as a template for your own work.
 
 ### `POST /api/v1/members` — Create a new member
 
@@ -188,7 +188,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 **Business Rules Enforced:**
 - Rule 1: Email must be unique. Membership status defaults to active.
 
-> **Produce this level of detail for every endpoint.** Your conventions, field names, and error format may differ from this example — consistency matters more than matching this template exactly.
+> **This is the level of detail you should aim for on every endpoint.** Your conventions, field names, and error format can differ from this example — what matters is that you're consistent across your whole API.
 
 ---
 
@@ -196,7 +196,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 
 ### Must Include (Core)
 
-These sections are **required** for every student:
+Everyone needs to cover these — they're the foundation of a solid LLD:
 
 - [ ] **Data Model**: Entities, attributes (with types), relationships, and constraints
 - [ ] **Conventions**: Base URL, naming, error format, date format, ID format, common status codes
@@ -206,7 +206,7 @@ These sections are **required** for every student:
 
 ### May Include (Advanced)
 
-These topics are **optional** and intended for students who want an extra challenge. If you include them, integrate them into your LLD — don't just mention them in passing.
+Want to go further? These topics are **optional** and meant for those who want a real challenge. If you tackle any of them, make sure you integrate them properly into your LLD — don't just name-drop them.
 
 - [ ] **Pagination**: How does the API handle large lists? Define query parameters (e.g. `page`, `pageSize`), response metadata (total count, links), and limits.
 - [ ] **Filtering and Sorting**: Can clients filter classes by date, instructor, or room? Can they sort results? Define the query parameter conventions.
@@ -222,11 +222,11 @@ These topics are **optional** and intended for students who want an extra challe
 
 ## Submission
 
-Submit your LLD as a single document (Markdown, PDF, or Word). Structure it clearly with headings and use tables, diagrams, and JSON examples generously. Remember: your document should speak for itself.
+Submit your LLD as a single document (Markdown, PDF, or Word). Use headings, tables, diagrams, and JSON examples generously — your document needs to speak for itself.
 
-### Self-Check Before Submission
+### Self-Check Before You Submit
 
-Ask yourself these questions:
+Before you hand it in, run through these questions honestly:
 
 1. Could someone implement this API without asking me a single question?
 2. Is every business rule from the scenario addressed in at least one endpoint?
@@ -238,7 +238,7 @@ Ask yourself these questions:
 
 ## Tips
 
-- **Be specific.** "Returns an error" is not enough. Specify *which* status code, *what* the error response body looks like, and *when* it occurs.
-- **Think about the consumer.** A frontend developer will read your API spec. Will they know exactly what to send and what to expect?
-- **Steal from the best.** Look at well-designed public APIs (Stripe, GitHub, Spotify) for inspiration on structure and conventions.
-- **Don't overcomplicate.** A clean, consistent API with 15 well-designed endpoints is better than a messy one with 30.
+- **Be specific.** "Returns an error" tells nobody anything. *Which* status code? *What* does the body look like? *When* does it happen?
+- **Think like a frontend dev.** Someone will consume your API. Could they build a UI against your spec without guessing?
+- **Steal from the best.** Look at APIs from Stripe, GitHub, or Spotify for inspiration — they've spent years getting their conventions right.
+- **Keep it clean.** 15 well-designed endpoints beat 30 messy ones. Every time.
