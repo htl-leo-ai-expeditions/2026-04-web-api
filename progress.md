@@ -30,3 +30,13 @@
 **Files changed:**
 - `exercise.md`: New "Design Decisions to Think About" section with 6 guided questions and a note about documenting choices.
 - `didactical-concept.md`: New subsection explaining the section's pedagogical purpose and a teacher note about how students should integrate (not isolate) their answers.
+
+## 2026-04-04 — Polish pass: reduce redundancy and tighten prose
+
+**What:** Cleanup and tightening across `exercise.md` and `goal.md` — no new content added.
+
+**Why:** After three additive iterations, the exercise had accumulated some redundancy and verbosity. A fresh read revealed: the "What You Will Practice" subsection restated what the intro already covered; the "Estimated Effort" didn't need its own heading; the Design Decisions intro was wordy; the worked example closing note was verbose; the "Be consistent" tip duplicated the self-check consistency question; and `goal.md` still listed domain candidates despite the domain being chosen in iteration 1.
+
+**Changes:**
+- `exercise.md`: Removed the "What You Will Practice" subsection (redundant with intro). Inlined estimated effort as a bold line. Tightened the Design Decisions intro paragraph. Shortened the worked example closing note. Removed the "Be consistent" tip (covered by self-check item 4). Sharpened self-check items 3 and 4 for clarity.
+- `goal.md`: Replaced the "Domain Choice (to be decided)" section with a definitive one-paragraph summary of the chosen domain and why.

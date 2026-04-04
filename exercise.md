@@ -6,17 +6,7 @@ In this exercise, you will design a RESTful web API for **FitBook**, a fictional
 
 Your LLD should be so precise that a competent developer — or a frontier AI model — could implement a fully working API from your document alone, without needing to ask a single clarifying question. Think of your LLD as a prompt: the clearer and more complete it is, the better the result.
 
-### What You Will Practice
-
-- Identifying resources and modeling data for a REST API
-- Designing endpoints with appropriate HTTP methods and URIs
-- Specifying request/response schemas, status codes, and validation rules
-- Thinking about edge cases and error handling before writing any code
-- Writing structured, unambiguous technical specifications
-
-### Estimated Effort
-
-4-8 hours of focused work. You do not need to finish in one sitting.
+**Estimated effort:** 4-8 hours of focused work. You do not need to finish in one sitting.
 
 ---
 
@@ -66,7 +56,7 @@ These rules define how FitBook works. Your API design must enforce all of them.
 
 ## Design Decisions to Think About
 
-As you work through the phases below, you will face design decisions that don't have a single correct answer. Part of the exercise is recognizing these decisions, weighing trade-offs, and documenting your choice. Here are some questions to consider — you don't need to answer them upfront, but keep them in mind as you design.
+As you design, you will face decisions that don't have a single correct answer. Keep these questions in mind — you don't need to answer them upfront, but your LLD should reflect deliberate choices on each.
 
 - **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
 - **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT". Should these be a separate entity with their own endpoints, a fixed enum, or a free-text list stored on the instructor? What does your choice imply for validation of Rule 4?
@@ -75,7 +65,7 @@ As you work through the phases below, you will face design decisions that don't 
 - **Time zone handling:** The studio operates in a specific time zone. Should the API accept and return UTC times, local times, or both? How does this affect Rule 9 (no booking past classes)?
 - **What the server generates vs. what the client sends:** Which fields should the server set automatically (e.g. `id`, `createdAt`)? Which fields should the client never be able to override?
 
-> **Note:** There are valid arguments for different choices. What matters is that you **make a deliberate decision and document it** in your LLD. An LLD that says "bookings are nested under classes *because...*" is better than one that nests them without explanation.
+> **There are no wrong answers here — only undocumented ones.** An LLD that says "bookings are nested under classes *because...*" is stronger than one that nests them without explanation.
 
 ---
 
@@ -198,7 +188,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 **Business Rules Enforced:**
 - Rule 1: Email must be unique. Membership status defaults to active.
 
-> **Important:** This example illustrates the format and depth — you are expected to produce similar detail for *every* endpoint in your LLD. Your conventions, field names, and error format may differ from this example, as long as they are consistent throughout your document.
+> **Produce this level of detail for every endpoint.** Your conventions, field names, and error format may differ from this example — consistency matters more than matching this template exactly.
 
 ---
 
@@ -240,8 +230,8 @@ Ask yourself these questions:
 
 1. Could someone implement this API without asking me a single question?
 2. Is every business rule from the scenario addressed in at least one endpoint?
-3. Are my error cases complete — what happens when things go wrong?
-4. Are my conventions consistent across all endpoints?
+3. For each endpoint, have I specified what happens when things go wrong — not just the happy path?
+4. Are my naming, error format, and conventions consistent across *all* endpoints?
 5. Did I include concrete JSON examples, not just abstract descriptions?
 
 ---
@@ -249,7 +239,6 @@ Ask yourself these questions:
 ## Tips
 
 - **Be specific.** "Returns an error" is not enough. Specify *which* status code, *what* the error response body looks like, and *when* it occurs.
-- **Be consistent.** If you decide on a naming convention, use it everywhere. If you define an error format, every error should follow it.
 - **Think about the consumer.** A frontend developer will read your API spec. Will they know exactly what to send and what to expect?
 - **Steal from the best.** Look at well-designed public APIs (Stripe, GitHub, Spotify) for inspiration on structure and conventions.
 - **Don't overcomplicate.** A clean, consistent API with 15 well-designed endpoints is better than a messy one with 30.

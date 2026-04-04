@@ -72,17 +72,6 @@ The exercise should clearly mark which parts are core and which are advanced, so
 - Estimated effort: 4-8 hours
 - Individual work
 
-## Domain Choice (to be decided)
+## Domain Choice: Fitness Studio ("FitBook")
 
-The exercise needs a concrete scenario. Criteria for a good domain:
-- Familiar enough that students don't need domain expertise
-- Complex enough to require multiple resources with relationships
-- Rich enough for interesting validation rules and edge cases
-- Not so large that the exercise becomes overwhelming
-
-Candidates:
-- Library management system (books, members, loans)
-- Event/ticket booking system
-- Small inventory/warehouse management
-- Fitness studio membership and class booking
-- Restaurant reservation and menu management
+The fitness studio domain was selected because it is familiar to students, has the right complexity (3 core entities + a many-to-many booking relationship), produces natural business rules (capacity limits, scheduling conflicts, qualification checks), and offers rich edge cases for advanced students without requiring domain expertise.
