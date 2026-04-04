@@ -119,3 +119,13 @@ The templates also reinforce the "LLD as prompt" framing — structured tables a
   - Added struggle entries for overlap boundaries and PUT vs PATCH
   - Added note about advanced topic effort grouping rationale
 - Added `solution-basic/`, `solution-average/`, `solution-good/` with sample LLDs and feedback reports from the three personas
+
+## 2026-04-04 — Add qualitative feedback report prompt for consistent student reviews
+
+**What:** Created `report-prompt.md` — a structured prompt that agents use to generate qualitative feedback reports on student LLD submissions. Reports are purely descriptive — no grades, scores, or quantitative ratings. Grading is reserved for human teachers.
+
+**Why:** Multiple agents will independently review different students' submissions. Without a shared prompt, reports would vary widely in structure, tone, and depth, making them hard to compare. The prompt enforces a fixed 8-section report structure (completeness, business rule coverage, design quality, specification precision, strengths, areas for improvement, advanced topics, summary), tone guidelines, and word count bounds. It explicitly prohibits any form of grading or scoring — that responsibility stays with the human teacher.
+
+**Files changed:**
+- `report-prompt.md`: New file with the full feedback report prompt.
+- `progress.md`: This entry.
