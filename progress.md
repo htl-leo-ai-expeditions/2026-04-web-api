@@ -50,3 +50,13 @@
 **Changes:**
 - `exercise.md`: Rewrote the introduction to be more engaging ("Here's the twist: you won't write a single line of code"). Made the scenario more vivid ("Picture a small fitness studio around the corner"). Added momentum to phase descriptions ("This is the main event"). Made tips punchier ("15 well-designed endpoints beat 30 messy ones. Every time."). Softened imperative language throughout while keeping instructions clear.
 - `didactical-concept.md`: New "Tone and Language" section explaining why conversational tone is a deliberate pedagogical choice, not casualness.
+
+## 2026-04-04 — Add pacing guidance and reduce repetitive busywork
+
+**What:** Added a phase-by-phase time budget to the introduction and practical guidance in Phase 4 about handling repetitive endpoints. Updated the core requirements checklist to match. Added a new "Pacing Guidance and the Repetition Problem" section to `didactical-concept.md`.
+
+**Why:** Critical review of the exercise's length revealed a problem: Phase 4 asks students to "fully specify every endpoint" at the worked example's detail level. For ~18 endpoints across 3 entities + bookings, that's 5+ hours of Phase 4 work alone — and much of it is mechanical repetition (GET /members/{id} is structurally identical to GET /instructors/{id}). This repetition doesn't teach anything new and risks students either burning out on boilerplate or rushing the genuinely interesting endpoints (bookings, class creation with overlap/qualification logic). The fix: students must still cover every endpoint, but they can abbreviate structurally similar ones by referencing an established pattern, reserving full detail for endpoints with unique business logic. The time budget helps students pace themselves and reinforces that Phases 1-3 deserve real investment.
+
+**Files changed:**
+- `exercise.md`: Added time budget table after "Estimated effort." Added "practical note about repetition" in Phase 4. Updated core requirements checklist wording.
+- `didactical-concept.md`: New section explaining the pacing guidance rationale and two failure modes teachers should watch for.

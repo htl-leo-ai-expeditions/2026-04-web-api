@@ -69,6 +69,19 @@ The worked example (`POST /api/v1/members`) serves as an **anchor point** — it
 
 **Teacher note:** If students' work looks significantly less detailed than the worked example, point them back to it. If a student copies the example's conventions but applies them consistently to all endpoints, that is a sign of good work — they understood the template.
 
+## Pacing Guidance and the Repetition Problem
+
+The exercise includes a phase-by-phase time budget and explicit guidance on handling repetitive endpoints. This addresses a real risk: without it, conscientious students spend 8+ hours writing nearly identical specs for structurally similar endpoints (e.g. every GET-by-id, every DELETE), learning nothing new after the third one. Meanwhile, the endpoints with genuinely interesting business logic (bookings, class creation with qualification/overlap checks) get rushed at the end.
+
+The guidance tells students to:
+- **Fully detail endpoints with unique business logic** (the ones that teach the most)
+- **Abbreviate structurally similar endpoints** by referencing an established pattern, while still listing fields, status codes, and endpoint-specific validation
+- **Never skip an endpoint entirely** — every endpoint from Phase 3 must appear in Phase 4
+
+This preserves the exercise's completeness requirement (an LLM still needs to know what every endpoint does) while redirecting student effort toward the design decisions that actually matter.
+
+**Teacher note:** Watch for two failure modes. (1) Students who abbreviate *everything* and produce a superficial spec — redirect them to the worked example's detail level for any endpoint that enforces a business rule. (2) Students who ignore the guidance and write 20 pages of copy-pasted boilerplate — tell them this is a sign they should extract shared patterns into their conventions section.
+
 ## Where Students Commonly Struggle
 
 | Struggle | How to Help |

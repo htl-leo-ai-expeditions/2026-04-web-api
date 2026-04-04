@@ -6,7 +6,16 @@ You are about to design a RESTful web API for **FitBook**, a fictional fitness s
 
 Why does this matter? Imagine handing your LLD to a developer — or pasting it into a frontier AI model like ChatGPT or Claude. If your spec is precise enough, they should be able to build a fully working API without asking you a single question. Your LLD *is* the prompt. Vague specs produce broken implementations. Precise specs produce working software.
 
-**Estimated effort:** 4-8 hours of focused work. You don't need to finish in one sitting.
+**Estimated effort:** 4-8 hours of focused work. You don't need to finish in one sitting. Here's a rough time budget to help you pace yourself:
+
+| Phase | What | Time |
+|-------|------|------|
+| Phase 1 | Data model (entities, attributes, relationships) | ~45 min |
+| Phase 2 | Conventions (naming, errors, formats) | ~30 min |
+| Phase 3 | Endpoint overview table | ~30 min |
+| Phase 4 | Detailed endpoint specifications | ~3-5 hours |
+
+Phase 4 is where the bulk of the work lives — and where you'll learn the most. Don't rush through the earlier phases to get there faster. A solid data model and clear conventions make Phase 4 dramatically easier.
 
 ---
 
@@ -121,7 +130,15 @@ This is the main event — now you go deep on every endpoint:
 - **Business rules enforced** — reference the rules from the scenario that apply to this endpoint
 - **Example request and response** (JSON) — at least one success and one error case per endpoint
 
-**Deliverable:** Detailed specification for every endpoint.
+**A practical note about repetition:** You'll notice that some endpoints follow the same structural pattern — for example, `GET /members/{id}` and `GET /instructors/{id}` work almost identically. You don't need to copy-paste the same boilerplate fifteen times. Instead:
+
+- **Fully detail every endpoint that has unique business logic.** Bookings, class creation, assignment changes — these have rules and edge cases that deserve thorough specification.
+- **For structurally similar endpoints,** you may write one full example and then specify only what differs for the rest (e.g. "follows the same pattern as `GET /members/{id}` — returns `404` if not found, response body includes fields: ..."). Make sure you still list the fields, status codes, and any endpoint-specific validation.
+- **Never skip an endpoint entirely.** Every endpoint from your Phase 3 table must appear in Phase 4, even if some entries are shorter than others.
+
+The goal is a spec that's complete and unambiguous — not one that's long for the sake of being long.
+
+**Deliverable:** Specification for every endpoint — full detail for unique logic, abbreviated (but complete) for repetitive patterns.
 
 ---
 
@@ -201,7 +218,7 @@ Everyone needs to cover these — they're the foundation of a solid LLD:
 - [ ] **Data Model**: Entities, attributes (with types), relationships, and constraints
 - [ ] **Conventions**: Base URL, naming, error format, date format, ID format, common status codes
 - [ ] **Endpoint Overview**: Complete table of all endpoints
-- [ ] **Endpoint Details**: Full specification for every endpoint (request/response schemas, status codes, validation, examples)
+- [ ] **Endpoint Details**: Specification for every endpoint — full detail for endpoints with unique logic, abbreviated (but complete) for repetitive patterns. Each endpoint must at minimum list its fields, status codes, and validation rules.
 - [ ] **Business Rule Coverage**: Every business rule from the scenario must be reflected in at least one endpoint's specification
 
 ### May Include (Advanced)
