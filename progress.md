@@ -60,3 +60,19 @@
 **Files changed:**
 - `exercise.md`: Added time budget table after "Estimated effort." Added "practical note about repetition" in Phase 4. Updated core requirements checklist wording.
 - `didactical-concept.md`: New section explaining the pacing guidance rationale and two failure modes teachers should watch for.
+
+## 2026-04-04 — Add deliverable templates and business rule coverage checklist
+
+**What:** Added copy-ready templates (empty tables, skeleton structures) to each phase in `exercise.md`, plus a business rule coverage checklist in the submission section. Added a corresponding section to `didactical-concept.md`.
+
+**Why:** The exercise told students *what* to deliver but not *what it should look like*. Students who understand the content requirements can still stall on formatting: "Do I write prose or a table? What columns should the table have? How do I structure an endpoint spec?" The templates answer these questions concretely. Specifically:
+- Phase 1 gets an entity attribute table template (with Type, Required, Unique, Notes columns) and a relationship table.
+- Phase 2 gets a conventions table, an error response JSON skeleton, and a status code table.
+- Phase 4 gets both a full endpoint spec template and an abbreviated template for repetitive endpoints.
+- The submission section gets a business rule coverage checklist where students map each of the 12 rules to the endpoint(s) that enforce it, making gaps immediately visible.
+
+The templates also reinforce the "LLD as prompt" framing — structured tables are more machine-readable than free-form prose.
+
+**Files changed:**
+- `exercise.md`: Added templates to Phases 1, 2, and 4. Added business rule coverage checklist to submission section.
+- `didactical-concept.md`: New section explaining the pedagogical purpose of templates and the coverage checklist.

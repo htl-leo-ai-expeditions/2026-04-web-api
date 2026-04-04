@@ -82,6 +82,17 @@ This preserves the exercise's completeness requirement (an LLM still needs to kn
 
 **Teacher note:** Watch for two failure modes. (1) Students who abbreviate *everything* and produce a superficial spec — redirect them to the worked example's detail level for any endpoint that enforces a business rule. (2) Students who ignore the guidance and write 20 pages of copy-pasted boilerplate — tell them this is a sign they should extract shared patterns into their conventions section.
 
+## Deliverable Templates and the Business Rule Checklist
+
+Each phase now includes copy-ready templates (empty tables, skeleton structures) that students can paste into their LLD and fill in. A business rule coverage checklist is added to the submission section. This addresses several problems:
+
+- **Reduces blank-page paralysis.** Students who know *what* to write but not *how to format it* often stall. A pre-structured table answers "what does this section look like?" before students have to think about content.
+- **Sets expectations concretely.** Templates make the expected granularity visible — e.g. the entity table has columns for Type, Required, Unique, and Notes, signaling that students need to think about all of these per attribute.
+- **Enforces completeness.** The business rule checklist asks students to map each rule to the endpoint(s) that enforce it. This makes gaps immediately visible and teaches traceability — a core practice in professional specification work.
+- **Supports the "LLD as prompt" framing.** Templates produce structured, machine-readable output. An LLM can work with a filled-in table far more reliably than with free-form prose.
+
+**Teacher note:** Some students will treat the templates as rigid constraints. Clarify that the templates are a starting point — students may add columns, split tables, or restructure as needed. What matters is that the information is present, not that it matches the template exactly. The abbreviated endpoint template is particularly important: it legitimizes brevity for repetitive endpoints while still requiring students to state what differs.
+
 ## Where Students Commonly Struggle
 
 | Struggle | How to Help |

@@ -92,6 +92,20 @@ Start by figuring out the "what." What are the main resources (entities) in this
 
 **Deliverable:** A data model section with entities, attributes, types, and relationships. An ER diagram is a nice bonus but not required.
 
+**Template — copy and fill in for each entity:**
+
+| Attribute | Type | Required | Unique | Notes |
+|-----------|------|----------|--------|-------|
+| `id` | ... | yes | yes | Server-generated |
+| `...` | ... | ... | ... | ... |
+
+**Template — relationships:**
+
+| Relationship | Type | Description |
+|--------------|------|-------------|
+| Instructor → Class | 1:N | ... |
+| ... | ... | ... |
+
 #### Phase 2: General Conventions
 
 Before you touch a single endpoint, nail down the rules that apply everywhere. This saves you from the classic mistake of designing ten endpoints and then realizing they all use different naming styles:
@@ -104,6 +118,38 @@ Before you touch a single endpoint, nail down the rules that apply everywhere. T
 - **Common HTTP status codes** — define which status codes you use and what they mean in your API
 
 **Deliverable:** A conventions section that a developer can reference when implementing any endpoint.
+
+**Template — fill in each convention:**
+
+| Convention | Your Decision |
+|------------|---------------|
+| Base URL | e.g. `/api/v1/` |
+| Resource naming in URIs | e.g. plural, lowercase, kebab-case |
+| ID format | e.g. auto-increment integers, UUIDs |
+| Date/time format | e.g. ISO 8601 in UTC |
+| Request/response body casing | e.g. camelCase |
+
+**Template — standard error response format (define the shape once):**
+
+```json
+{
+  "error": "...",
+  "message": "...",
+  "details": [ ]
+}
+```
+
+**Template — common status codes (list the codes your API uses and what they mean):**
+
+| Status Code | Meaning in Your API |
+|-------------|---------------------|
+| `200 OK` | ... |
+| `201 Created` | ... |
+| `204 No Content` | ... |
+| `400 Bad Request` | ... |
+| `404 Not Found` | ... |
+| `409 Conflict` | ... |
+| ... | ... |
 
 #### Phase 3: Endpoint Overview
 
@@ -139,6 +185,41 @@ This is the main event — now you go deep on every endpoint:
 The goal is a spec that's complete and unambiguous — not one that's long for the sake of being long.
 
 **Deliverable:** Specification for every endpoint — full detail for unique logic, abbreviated (but complete) for repetitive patterns.
+
+**Template — full endpoint specification (use for endpoints with unique business logic):**
+
+> ### `METHOD /api/v1/...` — Short description
+>
+> **Request Body:** *(if applicable)*
+>
+> | Field | Type | Required | Validation |
+> |-------|------|----------|------------|
+> | `...` | ... | ... | ... |
+>
+> **Success Response:** `2xx ...`
+>
+> ```json
+> { }
+> ```
+>
+> **Error Responses:**
+>
+> | Status Code | Condition |
+> |-------------|-----------|
+> | `4xx ...` | ... |
+>
+> **Business Rules Enforced:** Rule X, Rule Y
+
+**Template — abbreviated endpoint specification (use for structurally similar endpoints):**
+
+> ### `METHOD /api/v1/...` — Short description
+>
+> Follows the same pattern as `METHOD /api/v1/...` (link to the fully detailed one).
+>
+> **Differences:** *(list only what is specific to this endpoint)*
+> - Response fields: `...`
+> - Additional status codes: `...`
+> - Endpoint-specific validation: `...`
 
 ---
 
@@ -240,6 +321,27 @@ Want to go further? These topics are **optional** and meant for those who want a
 ## Submission
 
 Submit your LLD as a single document (Markdown, PDF, or Word). Use headings, tables, diagrams, and JSON examples generously — your document needs to speak for itself.
+
+### Business Rule Coverage Checklist
+
+Before submitting, verify that every business rule is addressed by at least one endpoint. Use this checklist to track coverage:
+
+| Rule # | Rule Summary | Covered in Endpoint(s) |
+|--------|-------------|------------------------|
+| 1 | Members: unique email, active/inactive status | `POST /...`, `PATCH /...` |
+| 2 | Instructors: unique email, qualifications | ... |
+| 3 | Classes: title, instructor, time, capacity, room | ... |
+| 4 | Instructor must hold matching qualification | ... |
+| 5 | No room overlap | ... |
+| 6 | No instructor time overlap | ... |
+| 7 | No duplicate booking | ... |
+| 8 | Capacity limit on bookings | ... |
+| 9 | No booking for past classes | ... |
+| 10 | Deleting class removes bookings | ... |
+| 11 | Cannot delete instructor with upcoming classes | ... |
+| 12 | Cannot delete member with upcoming bookings | ... |
+
+Replace the `...` entries with the actual endpoints from your spec. If a rule is not covered by any endpoint, your LLD has a gap.
 
 ### Self-Check Before You Submit
 
