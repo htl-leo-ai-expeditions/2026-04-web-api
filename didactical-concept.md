@@ -18,6 +18,7 @@ The fitness studio domain was chosen for several reasons:
 | Three entities + join relationship | Students practice identifying resources and deciding what becomes its own entity vs. an attribute |
 | Unique email constraints | Introduces the concept of natural keys and uniqueness validation |
 | Instructor qualifications (list attribute) | Forces a decision: model as a separate entity, a JSON array, or a comma-separated string? Exposes data modeling trade-offs |
+| Class category field | Makes Rule 4 (qualification matching) concrete. The explicit `category` field eliminates ambiguity about how to match a class to an instructor's qualifications — the match is category-to-qualification, not title-to-qualification. This was added after student testing revealed that all skill levels struggled when matching was left to the class title. |
 | Membership status (active/inactive) | Simple state that drives authorization-like logic without requiring an auth system |
 
 ### Conventions (Phase 2)
@@ -69,6 +70,17 @@ The worked example (`POST /api/v1/members`) serves as an **anchor point** — it
 
 **Teacher note:** If students' work looks significantly less detailed than the worked example, point them back to it. If a student copies the example's conventions but applies them consistently to all endpoints, that is a sign of good work — they understood the template.
 
+### Second Worked Example (Booking Creation)
+
+A second worked example (`POST /api/v1/classes/{classId}/bookings`) was added after student testing revealed that all three skill levels wanted to see how a multi-rule endpoint should be documented. The member creation example is useful but relatively simple (one business rule). The booking endpoint enforces four rules simultaneously (active membership, no duplicates, capacity, future-only), which is representative of the complexity students will face in their own specs.
+
+The second example also demonstrates:
+- How one endpoint maps to multiple error responses, each tied to a specific rule
+- The use of `403 Forbidden` for authorization-like checks (inactive member) vs. `409 Conflict` for state conflicts (capacity, duplicates)
+- Nested resource URIs in practice (`/classes/{classId}/bookings`)
+
+**Teacher note:** If a student's booking spec is significantly thinner than this example, it's a signal they're not thinking about all the error cases. Ask: "What happens if the member is inactive? If the class is full? If they already booked?"
+
 ## Pacing Guidance and the Repetition Problem
 
 The exercise includes a phase-by-phase time budget and explicit guidance on handling repetitive endpoints. This addresses a real risk: without it, conscientious students spend 8+ hours writing nearly identical specs for structurally similar endpoints (e.g. every GET-by-id, every DELETE), learning nothing new after the third one. Meanwhile, the endpoints with genuinely interesting business logic (bookings, class creation with qualification/overlap checks) get rushed at the end.
@@ -97,6 +109,8 @@ Each phase now includes copy-ready templates (empty tables, skeleton structures)
 
 | Struggle | How to Help |
 |----------|-------------|
+| Confusion about overlap boundary cases (Rules 5/6) | The exercise now clarifies that touching boundaries are allowed (class ending at 11:00, another starting at 11:00 = no overlap). If students still struggle, ask them to draw a timeline with two example classes and check whether any minute belongs to both. |
+| Not knowing whether to use PUT or PATCH | The design decisions section now explicitly raises this question. Neither is "wrong" — what matters is a documented, consistent choice. If a student uses PUT everywhere, that's fine for this exercise. If they use PATCH, they should specify which fields are patchable. |
 | Jumping straight to endpoint details without data modeling | Remind them the phases exist for a reason. Ask: "What are your entities?" before "What are your endpoints?" |
 | Inconsistent conventions across endpoints | Have them write the conventions section first and review it before moving on |
 | Missing error cases | Ask: "What happens if the member doesn't exist? If the class is full? If the email is already taken?" |
@@ -112,6 +126,8 @@ The split serves two purposes:
 2. **Challenges stronger students** without making the exercise longer. Advanced topics (pagination, concurrency, idempotency) add *depth* to the same endpoints, not *breadth*. A strong student's LLD for the same 15 endpoints will simply be more thorough.
 
 The checklist format in the exercise makes it clear which items are required and which are stretch goals. Teachers should emphasize that a complete, clean core submission scores better than a half-finished one that attempts all advanced topics.
+
+The advanced topics are now grouped by estimated effort (quick wins, medium, deep dives). This was added after student testing showed that stronger students wanted to attempt advanced topics but couldn't judge which ones were realistic in their remaining time. Without effort guidance, students either avoided all advanced topics or sank hours into a deep dive like OpenAPI while skipping easier wins like pagination.
 
 ## Tone and Language
 

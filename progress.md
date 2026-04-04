@@ -91,3 +91,31 @@ The templates also reinforce the "LLD as prompt" framing — structured tables a
 - `exercise.md`: Fixed worked example closing note; rephrased Design Decisions intro.
 - `didactical-concept.md`: Added "Self-Check and Tips" section.
 - `progress.md`: This entry.
+
+## 2026-04-04 — Student simulation testing and targeted improvements
+
+**What:** Simulated three student personas (struggling, average, strong) completing the exercise. Used their feedback to make targeted improvements to `exercise.md` and `didactical-concept.md`.
+
+**Why:** The exercise had been refined through multiple iterations but never tested from a student's perspective. All three simulated students independently identified the same pain points, lending confidence that these are real issues rather than edge cases.
+
+**Key findings from student testing:**
+1. **Qualification matching (Rule 4) was the #1 pain point across all levels.** The class had a "title" but no explicit "type/category" field, so students couldn't determine how to match a class to an instructor's qualifications. The struggling student hand-waved it, the average student invented substring matching, and the strong student created a whole separate entity.
+2. **All three requested a second worked example** for a complex, multi-rule endpoint.
+3. **PUT vs PATCH was never mentioned**, creating confusion especially since the worked example uses POST and the coverage checklist references PATCH.
+4. **Overlap boundary cases (Rules 5/6)** confused the weaker student — does 11:00-12:00 overlap with 10:00-11:00?
+5. **Advanced topics lacked effort estimates**, making it hard for strong students to choose wisely.
+
+**Changes made:**
+- `exercise.md`:
+  - Added `category` field to class entity (Rule 3) and updated Rule 4 to reference it explicitly
+  - Clarified overlap boundary rules (touching boundaries are allowed)
+  - Added PUT vs PATCH as a design decision
+  - Added a second worked example (`POST /classes/{classId}/bookings`) showing a multi-rule endpoint
+  - Grouped advanced topics by effort level (quick wins, medium, deep dives) with time estimates
+  - Updated qualification modeling design decision to reference the new category field
+- `didactical-concept.md`:
+  - Added entry for class category field explaining why it was added
+  - Added section on second worked example and its pedagogical purpose
+  - Added struggle entries for overlap boundaries and PUT vs PATCH
+  - Added note about advanced topic effort grouping rationale
+- Added `solution-basic/`, `solution-average/`, `solution-good/` with sample LLDs and feedback reports from the three personas

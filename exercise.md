@@ -50,10 +50,10 @@ These are the rules of the FitBook world. Your API must enforce every single one
 
 1. **Members** have a first name, last name, email (unique), and a membership status (active or inactive). Only active members can book classes.
 2. **Instructors** have a first name, last name, email (unique), and a list of qualifications (e.g. "Yoga", "HIIT", "Spinning").
-3. **Classes** have a title, description, an assigned instructor, a start time, a duration (in minutes), a maximum capacity, and a room name.
-4. An instructor can only be assigned to a class if they hold a matching qualification (e.g. a "Yoga" class requires the instructor to have the "Yoga" qualification).
-5. Classes must not overlap in the same room (no two classes in the same room at the same time).
-6. Classes must not overlap for the same instructor (an instructor cannot lead two classes at the same time).
+3. **Classes** have a title, a category (e.g. "Yoga", "HIIT", "Spinning"), a description, an assigned instructor, a start time, a duration (in minutes), a maximum capacity, and a room name.
+4. An instructor can only be assigned to a class if they hold a qualification matching the class's **category** (e.g. a class with category "Yoga" requires the instructor to have the "Yoga" qualification).
+5. Classes must not overlap in the same room (no two classes in the same room at the same time). Touching boundaries are fine — a class ending at 11:00 and another starting at 11:00 in the same room is allowed.
+6. Classes must not overlap for the same instructor (an instructor cannot lead two classes at the same time). Same boundary rule as above.
 7. A member cannot book the same class twice.
 8. A booking can only be made if the class has not yet reached its maximum capacity.
 9. A booking can only be made for classes that start in the future (not in the past).
@@ -68,10 +68,11 @@ These are the rules of the FitBook world. Your API must enforce every single one
 Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer — just trade-offs. You don't need to settle all of these before you start — you'll encounter them naturally as you work through the phases. But when you do, make a deliberate choice and document it in your LLD.
 
 - **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
-- **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT". Should these be a separate entity with their own endpoints, a fixed enum, or a free-text list stored on the instructor? What does your choice imply for validation of Rule 4?
+- **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT", and a class has a category that must match. Should qualifications (and class categories) be a separate entity with their own endpoints, a fixed enum, or a free-text list? What does your choice imply for validation of Rule 4 and for keeping category values consistent?
 - **Cancellation vs. deletion:** When a member cancels a booking, do you DELETE the booking resource or do you PATCH its status to "cancelled"? What information is lost in each case?
 - **Updating a class:** If an instructor is reassigned to a class that already has bookings, do the bookings stay? What if the capacity is reduced below the current number of bookings?
 - **Time zone handling:** The studio operates in a specific time zone. Should the API accept and return UTC times, local times, or both? How does this affect Rule 9 (no booking past classes)?
+- **PUT vs. PATCH for updates:** Should updating a resource require sending the full object (PUT) or just the changed fields (PATCH)? What are the trade-offs for each? You may choose one or offer both — just be consistent and document your choice.
 - **What the server generates vs. what the client sends:** Which fields should the server set automatically (e.g. `id`, `createdAt`)? Which fields should the client never be able to override?
 
 > **There are no wrong answers here — only undocumented ones.** "Bookings are nested under classes *because...*" beats silently nesting them without explanation every time.
@@ -288,6 +289,66 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 
 > **This is the level of detail you should aim for on endpoints with unique business logic.** For repetitive endpoints, you can abbreviate as described in Phase 4 — but this example shows the bar for the endpoints that matter most. Your conventions, field names, and error format can differ from this example — what matters is that you're consistent across your whole API.
 
+### `POST /api/v1/classes/{classId}/bookings` — Book a spot in a class
+
+**Description:** Creates a booking for a member in a specific class. This endpoint enforces multiple business rules and shows how to handle them in a single spec.
+
+**Request Body:**
+
+| Field | Type | Required | Validation |
+|-------|------|----------|------------|
+| `memberId` | string | yes | Must reference an existing member |
+
+**Success Response:** `201 Created`
+
+```json
+{
+  "id": "b-4821",
+  "classId": "c-300",
+  "memberId": "m-1024",
+  "bookedAt": "2026-04-04T14:22:00Z"
+}
+```
+
+Note: `id` and `bookedAt` are generated by the server.
+
+**Error Responses:**
+
+| Status Code | Condition |
+|-------------|-----------|
+| `400 Bad Request` | Missing or invalid `memberId` |
+| `404 Not Found` | Class or member does not exist |
+| `409 Conflict` | Member has already booked this class (Rule 7) |
+| `409 Conflict` | Class has reached maximum capacity (Rule 8) |
+| `409 Conflict` | Class starts in the past (Rule 9) |
+| `403 Forbidden` | Member's status is inactive (Rule 1) |
+
+**Error example — class is full (`409`):**
+
+```json
+{
+  "error": "CAPACITY_REACHED",
+  "message": "Class 'c-300' has reached its maximum capacity of 20."
+}
+```
+
+**Error example — inactive member (`403`):**
+
+```json
+{
+  "error": "INACTIVE_MEMBER",
+  "message": "Member 'm-1024' has an inactive membership and cannot book classes."
+}
+```
+
+**Business Rules Enforced:**
+- Rule 1: Only active members can book
+- Rule 7: No duplicate bookings
+- Rule 8: Capacity limit
+- Rule 9: No booking for past classes
+
+> **Notice how one endpoint can enforce multiple business rules.** Each rule maps to a specific error response. When you design your own endpoints, list every rule that applies and make sure you have an error case for each one.
+
 ---
 
 ## Requirements for Your LLD
@@ -304,16 +365,21 @@ Everyone needs to cover these — they're the foundation of a solid LLD:
 
 ### May Include (Advanced)
 
-Want to go further? These topics are **optional** and meant for those who want a real challenge. If you tackle any of them, make sure you integrate them properly into your LLD — don't just name-drop them.
+Want to go further? These topics are **optional** and meant for those who want a real challenge. If you tackle any of them, make sure you integrate them properly into your LLD — don't just name-drop them. Effort estimates are rough guides — your mileage may vary.
 
+**Quick wins (~20-30 min each):**
 - [ ] **Pagination**: How does the API handle large lists? Define query parameters (e.g. `page`, `pageSize`), response metadata (total count, links), and limits.
 - [ ] **Filtering and Sorting**: Can clients filter classes by date, instructor, or room? Can they sort results? Define the query parameter conventions.
+- [ ] **Rate Limiting**: How does the API protect itself from abuse? What headers communicate rate limit status?
+
+**Medium effort (~30-60 min each):**
 - [ ] **Concurrency Handling**: What happens if two members try to book the last spot at the same time? Consider ETags and optimistic locking for updates.
 - [ ] **Idempotency**: Are your POST/PUT/PATCH operations safe to retry? How do you prevent double-bookings on network retries?
 - [ ] **Conditional Requests**: Use of `If-Match`, `If-None-Match`, `If-Modified-Since` headers for cache validation and conflict detection.
 - [ ] **Bulk Operations**: Can an admin create multiple classes at once? How would a bulk endpoint work?
+
+**Deep dives (~1-2+ hours each):**
 - [ ] **HATEOAS / Hypermedia**: Do your responses include links to related resources or available actions?
-- [ ] **Rate Limiting**: How does the API protect itself from abuse? What headers communicate rate limit status?
 - [ ] **OpenAPI Specification**: Write an OpenAPI (Swagger) YAML/JSON specification for a subset of your endpoints.
 
 ---
