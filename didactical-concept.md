@@ -47,6 +47,17 @@ This is where the bulk of the work happens. Key learning moments:
 - **Error scenarios**: Students typically forget the unhappy path. The business rules force them to think about what can go wrong.
 - **JSON examples**: Writing concrete examples often reveals inconsistencies in the abstract specification.
 
+### Worked Example (between Phase 4 and Requirements)
+
+The worked example (`POST /api/v1/members`) serves as an **anchor point** — it answers the question "How detailed should I be?" more effectively than any instruction can. Pedagogical rationale:
+
+- **Reduces ambiguity.** Students see the exact format and depth expected: field-level validation, multiple error cases with JSON bodies, explicit status codes, and a business rule reference.
+- **Models good practice.** The example demonstrates server-generated fields (`id`, `createdAt`), default values (`membershipStatus`), and structured error responses with a `details` array — patterns students should adopt.
+- **Prevents over-/under-specification.** Without an example, some students write one-liners ("POST creates a member") while others write pages of prose. The example calibrates expectations.
+- **Deliberately uses `POST /members`** (the simplest write endpoint) so that it is easy to understand but still shows validation, uniqueness conflicts (409), and server-generated fields. It does not spoil the more interesting design decisions (booking logic, scheduling conflicts).
+
+**Teacher note:** If students' work looks significantly less detailed than the worked example, point them back to it. If a student copies the example's conventions but applies them consistently to all endpoints, that is a sign of good work — they understood the template.
+
 ## Where Students Commonly Struggle
 
 | Struggle | How to Help |
