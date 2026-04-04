@@ -65,7 +65,7 @@ These are the rules of the FitBook world. Your API must enforce every single one
 
 ## Design Decisions to Think About
 
-Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer — just trade-offs. Don't try to answer these upfront. Instead, keep them in the back of your mind and let your LLD reflect a deliberate choice on each.
+Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer — just trade-offs. You don't need to settle all of these before you start — you'll encounter them naturally as you work through the phases. But when you do, make a deliberate choice and document it in your LLD.
 
 - **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
 - **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT". Should these be a separate entity with their own endpoints, a fixed enum, or a free-text list stored on the instructor? What does your choice imply for validation of Rule 4?
@@ -286,7 +286,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 **Business Rules Enforced:**
 - Rule 1: Email must be unique. Membership status defaults to active.
 
-> **This is the level of detail you should aim for on every endpoint.** Your conventions, field names, and error format can differ from this example — what matters is that you're consistent across your whole API.
+> **This is the level of detail you should aim for on endpoints with unique business logic.** For repetitive endpoints, you can abbreviate as described in Phase 4 — but this example shows the bar for the endpoints that matter most. Your conventions, field names, and error format can differ from this example — what matters is that you're consistent across your whole API.
 
 ---
 

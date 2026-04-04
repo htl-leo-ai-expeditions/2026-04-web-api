@@ -76,3 +76,18 @@ The templates also reinforce the "LLD as prompt" framing — structured tables a
 **Files changed:**
 - `exercise.md`: Added templates to Phases 1, 2, and 4. Added business rule coverage checklist to submission section.
 - `didactical-concept.md`: New section explaining the pedagogical purpose of templates and the coverage checklist.
+
+## 2026-04-04 — Final polish: fix contradictions, fill didactical gaps
+
+**What:** Read the full exercise from a student's perspective and the didactical concept from a teacher's perspective. Fixed issues found and filled gaps.
+
+**Why:** After eight additive iterations, a fresh end-to-end read revealed a few issues:
+
+1. **Worked example closing note contradicted Phase 4 guidance.** The note said "This is the level of detail you should aim for on every endpoint" — but Phase 4 explicitly tells students they can abbreviate repetitive endpoints. A student following both instructions would be confused. Fixed to say "on endpoints with unique business logic" and reference the Phase 4 abbreviation guidance.
+2. **Design Decisions intro was slightly misleading.** "Don't try to answer these upfront" was ambiguous since students read the section before starting work. Rephrased to "You don't need to settle all of these before you start — you'll encounter them naturally as you work through the phases."
+3. **Didactical concept had no coverage of the self-check and tips sections.** These are pedagogical tools a teacher should understand. Added a new section explaining the purpose of both and how to use the self-check as structured feedback.
+
+**Files changed:**
+- `exercise.md`: Fixed worked example closing note; rephrased Design Decisions intro.
+- `didactical-concept.md`: Added "Self-Check and Tips" section.
+- `progress.md`: This entry.

@@ -124,6 +124,15 @@ The exercise uses a direct, conversational tone rather than formal academic lang
 
 **Teacher note:** If students perceive the tone as "too casual," the content will correct that impression quickly once they hit the design decisions and business rules.
 
+## Self-Check and Tips
+
+The exercise closes with two lightweight tools: a five-question self-check and a short tips section.
+
+- **Self-check questions** mirror the exercise's core quality criteria (implementability, business rule coverage, error handling, consistency, concrete examples). They serve as a final gate before submission — students who can honestly answer "yes" to all five have likely produced a solid LLD. The questions are deliberately framed as yes/no so students can't hide behind vague self-assessment.
+- **Tips** reinforce the most common failure modes in a punchy, memorable format. "15 well-designed endpoints beat 30 messy ones" sticks better than a paragraph about scope management. The tip to study real-world APIs (Stripe, GitHub, Spotify) gives struggling students a concrete next step.
+
+**Teacher note:** If a student's submission fails the self-check on multiple questions, use those questions as structured feedback — they point directly at what needs improvement.
+
 ## Connection to Broader Learning Objective
 
 The exercise frames the LLD as a "prompt for an AI." This serves multiple purposes:
