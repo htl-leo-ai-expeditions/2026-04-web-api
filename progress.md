@@ -129,3 +129,15 @@ The templates also reinforce the "LLD as prompt" framing — structured tables a
 **Files changed:**
 - `report-prompt.md`: New file with the full feedback report prompt.
 - `progress.md`: This entry.
+
+## 2026-04-05 — Style pass: remove all em dashes and en dashes
+
+**What:** Replaced all em dashes and en dashes in `readme.md`, `exercise.md`, and `didactical-concept.md` with alternative constructions (separate sentences, commas, colons, or parentheses).
+
+**Why:** A new style rule was adopted: no em dashes or en dashes to join clauses or add asides. This rule is now part of `CLAUDE.md` and should be applied from the start in future exercise creation sessions. The replacements used separate sentences where possible, parentheses for brief asides, commas for softer connections, and colons for introductions or clarifications. Heading separators (e.g. "Prompt 1: Bootstrap", "Template: copy and fill in") were changed to colons.
+
+**Files changed:**
+- `readme.md`: ~30 em dash replacements across headings, body text, and table cells.
+- `exercise.md`: ~40 em dash replacements across the title, templates, endpoint headings, error example headings, list items, and body text.
+- `didactical-concept.md`: ~20 em dash replacements across body text and table cells.
+- `progress.md`: This entry. Note for future sessions: the no-em-dash style rule should be included in `CLAUDE.md` from the beginning of any new exercise project.

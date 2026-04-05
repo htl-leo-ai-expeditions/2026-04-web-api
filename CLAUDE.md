@@ -93,3 +93,7 @@ Each time you wake up, do the following **in order**:
 - **You have no memory of prior runs.** That is expected. `progress.md` is your shared memory. Read it carefully.
 - **You may improve any file**, including `goal.md`, but stay aligned with the mission and design principles above.
 - **Write everything in English.** All files — exercise, goal, progress, didactical concept — are in English.
+
+## Style rule
+
+Do not use em dashes or en dashes to join clauses or add asides. Rewrite those constructions as separate sentences whenever possible. If a brief aside is needed, use parentheses. If a softer connection is needed, use a comma. If introducing clarification, use a colon.

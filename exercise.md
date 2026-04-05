@@ -1,10 +1,10 @@
-# Exercise: Designing a RESTful Web API — FitBook Studio
+# Exercise: Designing a RESTful Web API for FitBook Studio
 
 ## Introduction
 
-You are about to design a RESTful web API for **FitBook**, a fictional fitness studio management system. Here's the twist: **you won't write a single line of code.** Instead, you will produce a **Low-Level Design (LLD) document** — a complete blueprint that specifies every detail of the API.
+You are about to design a RESTful web API for **FitBook**, a fictional fitness studio management system. Here's the twist: **you won't write a single line of code.** Instead, you will produce a **Low-Level Design (LLD) document**, a complete blueprint that specifies every detail of the API.
 
-Why does this matter? Imagine handing your LLD to a developer — or pasting it into a frontier AI model like ChatGPT or Claude. If your spec is precise enough, they should be able to build a fully working API without asking you a single question. Your LLD *is* the prompt. Vague specs produce broken implementations. Precise specs produce working software.
+Why does this matter? Imagine handing your LLD to a developer, or pasting it into a frontier AI model like ChatGPT or Claude. If your spec is precise enough, they should be able to build a fully working API without asking you a single question. Your LLD *is* the prompt. Vague specs produce broken implementations. Precise specs produce working software.
 
 **Estimated effort:** 4-8 hours of focused work. You don't need to finish in one sitting. Here's a rough time budget to help you pace yourself:
 
@@ -15,13 +15,13 @@ Why does this matter? Imagine handing your LLD to a developer — or pasting it 
 | Phase 3 | Endpoint overview table | ~30 min |
 | Phase 4 | Detailed endpoint specifications | ~3-5 hours |
 
-Phase 4 is where the bulk of the work lives — and where you'll learn the most. Don't rush through the earlier phases to get there faster. A solid data model and clear conventions make Phase 4 dramatically easier.
+Phase 4 is where the bulk of the work lives, and where you'll learn the most. Don't rush through the earlier phases to get there faster. A solid data model and clear conventions make Phase 4 dramatically easier.
 
 ---
 
 ## The Scenario: FitBook Studio
 
-Picture a small fitness studio around the corner. They run group classes — Yoga on Monday mornings, Spinning at lunch, HIIT after work — each led by an instructor. People sign up as members and book spots in upcoming classes. The studio owner wants an API to manage all of this.
+Picture a small fitness studio around the corner. They run group classes (Yoga on Monday mornings, Spinning at lunch, HIIT after work), each led by an instructor. People sign up as members and book spots in upcoming classes. The studio owner wants an API to manage all of this.
 
 ### The Domain at a Glance
 
@@ -42,17 +42,17 @@ Three things matter in this domain: **members**, **instructors**, and **classes*
 
 - An **instructor** can lead many classes, but each class has exactly one instructor.
 - A **member** can book spots in many classes, and a class can have many members booked.
-- Each class has a **maximum capacity** — once it is full, no more bookings are accepted.
+- Each class has a **maximum capacity**. Once it is full, no more bookings are accepted.
 
 ### Core Business Rules
 
-These are the rules of the FitBook world. Your API must enforce every single one — if a rule says "only active members can book," then your API needs to check that and reject the request if it's violated.
+These are the rules of the FitBook world. Your API must enforce every single one. If a rule says "only active members can book," then your API needs to check that and reject the request if it's violated.
 
 1. **Members** have a first name, last name, email (unique), and a membership status (active or inactive). Only active members can book classes.
 2. **Instructors** have a first name, last name, email (unique), and a list of qualifications (e.g. "Yoga", "HIIT", "Spinning").
 3. **Classes** have a title, a category (e.g. "Yoga", "HIIT", "Spinning"), a description, an assigned instructor, a start time, a duration (in minutes), a maximum capacity, and a room name.
 4. An instructor can only be assigned to a class if they hold a qualification matching the class's **category** (e.g. a class with category "Yoga" requires the instructor to have the "Yoga" qualification).
-5. Classes must not overlap in the same room (no two classes in the same room at the same time). Touching boundaries are fine — a class ending at 11:00 and another starting at 11:00 in the same room is allowed.
+5. Classes must not overlap in the same room (no two classes in the same room at the same time). Touching boundaries are fine: a class ending at 11:00 and another starting at 11:00 in the same room is allowed.
 6. Classes must not overlap for the same instructor (an instructor cannot lead two classes at the same time). Same boundary rule as above.
 7. A member cannot book the same class twice.
 8. A booking can only be made if the class has not yet reached its maximum capacity.
@@ -65,23 +65,23 @@ These are the rules of the FitBook world. Your API must enforce every single one
 
 ## Design Decisions to Think About
 
-Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer — just trade-offs. You don't need to settle all of these before you start — you'll encounter them naturally as you work through the phases. But when you do, make a deliberate choice and document it in your LLD.
+Here's where it gets interesting. As you design, you'll run into questions where there is no single "correct" answer, just trade-offs. You don't need to settle all of these before you start. You'll encounter them naturally as you work through the phases. But when you do, make a deliberate choice and document it in your LLD.
 
 - **Bookings as a resource:** Is a booking its own top-level resource (`/api/v1/bookings`) or is it nested under a class (`/api/v1/classes/{id}/bookings`)? What are the trade-offs? What if you need to look up all bookings for a specific member?
 - **Modeling qualifications:** An instructor has qualifications like "Yoga" or "HIIT", and a class has a category that must match. Should qualifications (and class categories) be a separate entity with their own endpoints, a fixed enum, or a free-text list? What does your choice imply for validation of Rule 4 and for keeping category values consistent?
 - **Cancellation vs. deletion:** When a member cancels a booking, do you DELETE the booking resource or do you PATCH its status to "cancelled"? What information is lost in each case?
 - **Updating a class:** If an instructor is reassigned to a class that already has bookings, do the bookings stay? What if the capacity is reduced below the current number of bookings?
 - **Time zone handling:** The studio operates in a specific time zone. Should the API accept and return UTC times, local times, or both? How does this affect Rule 9 (no booking past classes)?
-- **PUT vs. PATCH for updates:** Should updating a resource require sending the full object (PUT) or just the changed fields (PATCH)? What are the trade-offs for each? You may choose one or offer both — just be consistent and document your choice.
+- **PUT vs. PATCH for updates:** Should updating a resource require sending the full object (PUT) or just the changed fields (PATCH)? What are the trade-offs for each? You may choose one or offer both, just be consistent and document your choice.
 - **What the server generates vs. what the client sends:** Which fields should the server set automatically (e.g. `id`, `createdAt`)? Which fields should the client never be able to override?
 
-> **There are no wrong answers here — only undocumented ones.** "Bookings are nested under classes *because...*" beats silently nesting them without explanation every time.
+> **There are no wrong answers here, only undocumented ones.** "Bookings are nested under classes *because...*" beats silently nesting them without explanation every time.
 
 ---
 
 ## Your Task: Write the LLD
 
-Your LLD must cover all the sections below. The key principle: work **top-down**. Start with the big picture, then zoom in step by step. It's tempting to jump straight into endpoint details — resist that urge. You'll save yourself a lot of rework.
+Your LLD must cover all the sections below. The key principle: work **top-down**. Start with the big picture, then zoom in step by step. It's tempting to jump straight into endpoint details. Resist that urge. You'll save yourself a lot of rework.
 
 ### Recommended Workflow
 
@@ -93,14 +93,14 @@ Start by figuring out the "what." What are the main resources (entities) in this
 
 **Deliverable:** A data model section with entities, attributes, types, and relationships. An ER diagram is a nice bonus but not required.
 
-**Template — copy and fill in for each entity:**
+**Template: copy and fill in for each entity:**
 
 | Attribute | Type | Required | Unique | Notes |
 |-----------|------|----------|--------|-------|
 | `id` | ... | yes | yes | Server-generated |
 | `...` | ... | ... | ... | ... |
 
-**Template — relationships:**
+**Template: relationships:**
 
 | Relationship | Type | Description |
 |--------------|------|-------------|
@@ -111,16 +111,16 @@ Start by figuring out the "what." What are the main resources (entities) in this
 
 Before you touch a single endpoint, nail down the rules that apply everywhere. This saves you from the classic mistake of designing ten endpoints and then realizing they all use different naming styles:
 
-- **Base URL structure** — e.g. `/api/v1/...`
-- **Naming conventions** — how are resources named in URIs? Plural or singular? camelCase or kebab-case?
-- **Standard error response format** — what does every error response look like? (e.g. a JSON object with `error`, `message`, `details` fields)
-- **Date/time format** — how are dates and times represented? (e.g. ISO 8601)
-- **ID format** — auto-increment integers, UUIDs, or something else?
-- **Common HTTP status codes** — define which status codes you use and what they mean in your API
+- **Base URL structure:** e.g. `/api/v1/...`
+- **Naming conventions:** how are resources named in URIs? Plural or singular? camelCase or kebab-case?
+- **Standard error response format:** what does every error response look like? (e.g. a JSON object with `error`, `message`, `details` fields)
+- **Date/time format:** how are dates and times represented? (e.g. ISO 8601)
+- **ID format:** auto-increment integers, UUIDs, or something else?
+- **Common HTTP status codes:** define which status codes you use and what they mean in your API
 
 **Deliverable:** A conventions section that a developer can reference when implementing any endpoint.
 
-**Template — fill in each convention:**
+**Template: fill in each convention:**
 
 | Convention | Your Decision |
 |------------|---------------|
@@ -130,7 +130,7 @@ Before you touch a single endpoint, nail down the rules that apply everywhere. T
 | Date/time format | e.g. ISO 8601 in UTC |
 | Request/response body casing | e.g. camelCase |
 
-**Template — standard error response format (define the shape once):**
+**Template: standard error response format (define the shape once):**
 
 ```json
 {
@@ -140,7 +140,7 @@ Before you touch a single endpoint, nail down the rules that apply everywhere. T
 }
 ```
 
-**Template — common status codes (list the codes your API uses and what they mean):**
+**Template: common status codes (list the codes your API uses and what they mean):**
 
 | Status Code | Meaning in Your API |
 |-------------|---------------------|
@@ -154,7 +154,7 @@ Before you touch a single endpoint, nail down the rules that apply everywhere. T
 
 #### Phase 3: Endpoint Overview
 
-Now sketch out the full map of your API. List every endpoint: HTTP method, URI, and a one-line description. Don't worry about request/response bodies yet — this is just the bird's-eye view.
+Now sketch out the full map of your API. List every endpoint: HTTP method, URI, and a one-line description. Don't worry about request/response bodies yet. This is just the bird's-eye view.
 
 Example format:
 
@@ -168,28 +168,28 @@ Example format:
 
 #### Phase 4: Endpoint Details
 
-This is the main event — now you go deep on every endpoint:
+This is the main event. Now you go deep on every endpoint:
 
 - **HTTP method and URI** (from Phase 3)
-- **Request body** (if applicable) — with field names, types, required/optional, and validation rules
-- **Response body** — with field names and types for success responses
-- **Status codes** — for success and each error case, with a description of when each occurs
-- **Business rules enforced** — reference the rules from the scenario that apply to this endpoint
-- **Example request and response** (JSON) — at least one success and one error case per endpoint
+- **Request body** (if applicable): with field names, types, required/optional, and validation rules
+- **Response body:** with field names and types for success responses
+- **Status codes:** for success and each error case, with a description of when each occurs
+- **Business rules enforced:** reference the rules from the scenario that apply to this endpoint
+- **Example request and response** (JSON): at least one success and one error case per endpoint
 
-**A practical note about repetition:** You'll notice that some endpoints follow the same structural pattern — for example, `GET /members/{id}` and `GET /instructors/{id}` work almost identically. You don't need to copy-paste the same boilerplate fifteen times. Instead:
+**A practical note about repetition:** You'll notice that some endpoints follow the same structural pattern. For example, `GET /members/{id}` and `GET /instructors/{id}` work almost identically. You don't need to copy-paste the same boilerplate fifteen times. Instead:
 
-- **Fully detail every endpoint that has unique business logic.** Bookings, class creation, assignment changes — these have rules and edge cases that deserve thorough specification.
-- **For structurally similar endpoints,** you may write one full example and then specify only what differs for the rest (e.g. "follows the same pattern as `GET /members/{id}` — returns `404` if not found, response body includes fields: ..."). Make sure you still list the fields, status codes, and any endpoint-specific validation.
+- **Fully detail every endpoint that has unique business logic.** Bookings, class creation, and assignment changes have rules and edge cases that deserve thorough specification.
+- **For structurally similar endpoints,** you may write one full example and then specify only what differs for the rest (e.g. "follows the same pattern as `GET /members/{id}`, returns `404` if not found, response body includes fields: ..."). Make sure you still list the fields, status codes, and any endpoint-specific validation.
 - **Never skip an endpoint entirely.** Every endpoint from your Phase 3 table must appear in Phase 4, even if some entries are shorter than others.
 
-The goal is a spec that's complete and unambiguous — not one that's long for the sake of being long.
+The goal is a spec that's complete and unambiguous, not one that's long for the sake of being long.
 
-**Deliverable:** Specification for every endpoint — full detail for unique logic, abbreviated (but complete) for repetitive patterns.
+**Deliverable:** Specification for every endpoint: full detail for unique logic, abbreviated (but complete) for repetitive patterns.
 
-**Template — full endpoint specification (use for endpoints with unique business logic):**
+**Template: full endpoint specification (use for endpoints with unique business logic):**
 
-> ### `METHOD /api/v1/...` — Short description
+> ### `METHOD /api/v1/...`: Short description
 >
 > **Request Body:** *(if applicable)*
 >
@@ -211,9 +211,9 @@ The goal is a spec that's complete and unambiguous — not one that's long for t
 >
 > **Business Rules Enforced:** Rule X, Rule Y
 
-**Template — abbreviated endpoint specification (use for structurally similar endpoints):**
+**Template: abbreviated endpoint specification (use for structurally similar endpoints):**
 
-> ### `METHOD /api/v1/...` — Short description
+> ### `METHOD /api/v1/...`: Short description
 >
 > Follows the same pattern as `METHOD /api/v1/...` (link to the fully detailed one).
 >
@@ -228,7 +228,7 @@ The goal is a spec that's complete and unambiguous — not one that's long for t
 
 Wondering how detailed your specs should be? Here's a fully worked-out endpoint to set the bar. Use it as a template for your own work.
 
-### `POST /api/v1/members` — Create a new member
+### `POST /api/v1/members`: Create a new member
 
 **Description:** Registers a new member in the system.
 
@@ -262,7 +262,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 | `400 Bad Request` | Missing or invalid fields (e.g. blank name, malformed email) | See below |
 | `409 Conflict` | A member with this email already exists | See below |
 
-**Error example — validation failure (`400`):**
+**Error example: validation failure (`400`):**
 
 ```json
 {
@@ -275,7 +275,7 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 }
 ```
 
-**Error example — duplicate email (`409`):**
+**Error example: duplicate email (`409`):**
 
 ```json
 {
@@ -287,9 +287,9 @@ Note: `membershipStatus` defaults to `"active"` on creation. `id` and `createdAt
 **Business Rules Enforced:**
 - Rule 1: Email must be unique. Membership status defaults to active.
 
-> **This is the level of detail you should aim for on endpoints with unique business logic.** For repetitive endpoints, you can abbreviate as described in Phase 4 — but this example shows the bar for the endpoints that matter most. Your conventions, field names, and error format can differ from this example — what matters is that you're consistent across your whole API.
+> **This is the level of detail you should aim for on endpoints with unique business logic.** For repetitive endpoints, you can abbreviate as described in Phase 4, but this example shows the bar for the endpoints that matter most. Your conventions, field names, and error format can differ from this example. What matters is that you're consistent across your whole API.
 
-### `POST /api/v1/classes/{classId}/bookings` — Book a spot in a class
+### `POST /api/v1/classes/{classId}/bookings`: Book a spot in a class
 
 **Description:** Creates a booking for a member in a specific class. This endpoint enforces multiple business rules and shows how to handle them in a single spec.
 
@@ -323,7 +323,7 @@ Note: `id` and `bookedAt` are generated by the server.
 | `409 Conflict` | Class starts in the past (Rule 9) |
 | `403 Forbidden` | Member's status is inactive (Rule 1) |
 
-**Error example — class is full (`409`):**
+**Error example: class is full (`409`):**
 
 ```json
 {
@@ -332,7 +332,7 @@ Note: `id` and `bookedAt` are generated by the server.
 }
 ```
 
-**Error example — inactive member (`403`):**
+**Error example: inactive member (`403`):**
 
 ```json
 {
@@ -355,17 +355,17 @@ Note: `id` and `bookedAt` are generated by the server.
 
 ### Must Include (Core)
 
-Everyone needs to cover these — they're the foundation of a solid LLD:
+Everyone needs to cover these. They're the foundation of a solid LLD:
 
 - [ ] **Data Model**: Entities, attributes (with types), relationships, and constraints
 - [ ] **Conventions**: Base URL, naming, error format, date format, ID format, common status codes
 - [ ] **Endpoint Overview**: Complete table of all endpoints
-- [ ] **Endpoint Details**: Specification for every endpoint — full detail for endpoints with unique logic, abbreviated (but complete) for repetitive patterns. Each endpoint must at minimum list its fields, status codes, and validation rules.
+- [ ] **Endpoint Details**: Specification for every endpoint, with full detail for endpoints with unique logic and abbreviated (but complete) entries for repetitive patterns. Each endpoint must at minimum list its fields, status codes, and validation rules.
 - [ ] **Business Rule Coverage**: Every business rule from the scenario must be reflected in at least one endpoint's specification
 
 ### May Include (Advanced)
 
-Want to go further? These topics are **optional** and meant for those who want a real challenge. If you tackle any of them, make sure you integrate them properly into your LLD — don't just name-drop them. Effort estimates are rough guides — your mileage may vary.
+Want to go further? These topics are **optional** and meant for those who want a real challenge. If you tackle any of them, make sure you integrate them properly into your LLD. Don't just name-drop them. Effort estimates are rough guides, and your mileage may vary.
 
 **Quick wins (~20-30 min each):**
 - [ ] **Pagination**: How does the API handle large lists? Define query parameters (e.g. `page`, `pageSize`), response metadata (total count, links), and limits.
@@ -386,7 +386,7 @@ Want to go further? These topics are **optional** and meant for those who want a
 
 ## Submission
 
-Submit your LLD as a single document (Markdown, PDF, or Word). Use headings, tables, diagrams, and JSON examples generously — your document needs to speak for itself.
+Submit your LLD as a single document (Markdown, PDF, or Word). Use headings, tables, diagrams, and JSON examples generously. Your document needs to speak for itself.
 
 ### Business Rule Coverage Checklist
 
@@ -415,7 +415,7 @@ Before you hand it in, run through these questions honestly:
 
 1. Could someone implement this API without asking me a single question?
 2. Is every business rule from the scenario addressed in at least one endpoint?
-3. For each endpoint, have I specified what happens when things go wrong — not just the happy path?
+3. For each endpoint, have I specified what happens when things go wrong, not just the happy path?
 4. Are my naming, error format, and conventions consistent across *all* endpoints?
 5. Did I include concrete JSON examples, not just abstract descriptions?
 
@@ -425,5 +425,5 @@ Before you hand it in, run through these questions honestly:
 
 - **Be specific.** "Returns an error" tells nobody anything. *Which* status code? *What* does the body look like? *When* does it happen?
 - **Think like a frontend dev.** Someone will consume your API. Could they build a UI against your spec without guessing?
-- **Steal from the best.** Look at APIs from Stripe, GitHub, or Spotify for inspiration — they've spent years getting their conventions right.
+- **Steal from the best.** Look at APIs from Stripe, GitHub, or Spotify for inspiration. They've spent years getting their conventions right.
 - **Keep it clean.** 15 well-designed endpoints beat 30 messy ones. Every time.
